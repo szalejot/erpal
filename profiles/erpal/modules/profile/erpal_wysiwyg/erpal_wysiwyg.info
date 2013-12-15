@@ -1,0 +1,23 @@
+name = ERPAL WYSIWYG
+description = ERPAL WYSIWSG Module
+core = 7.x
+package = ERPAL UI
+version = 7.x-1.0-dev
+project = erpal_wysiwyg
+dependencies[] = ajax_checklist
+dependencies[] = ckeditor
+dependencies[] = features
+dependencies[] = filter
+dependencies[] = freelinking
+features[ckeditor_profile][] = ERPAL
+features[features_api][] = api:2
+features[filter][] = filtered_html
+features[filter][] = full_html
+features[filter][] = plain_text
+
+; Information added by  packaging script on 2013-11-15
+version = "7.x-2.0-alpha6"
+core = "7.x"
+project = "erpal"
+datestamp = "1384533536"
+

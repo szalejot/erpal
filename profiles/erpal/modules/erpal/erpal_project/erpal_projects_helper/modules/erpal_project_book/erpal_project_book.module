@@ -1,0 +1,61 @@
+<?php
+/**
+ * @file
+ * Code for the erpal_project_book feature.
+ */
+
+include_once 'erpal_project_book.features.inc';
+
+module_load_include('inc', 'erpal_project_book', 'inc/custom');
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function erpal_project_book_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+* Implements hook_quicktabs_alter()
+* We do this as quicktabs don't seam to work very well with features override components
+*/
+function erpal_project_book_quicktabs_alter(&$quicktabs) {
+  if ($quicktabs->machine_name == 'task_content_tabs') {    
+    $quicktabs->tabs[] = array(
+      'bid' => 'panels_mini_delta_task_concept_panel',
+      'hide_title' => 1,
+      'title' => 'Concept',
+      'weight' => 10,
+      'type' => 'block',
+    );
+  }
+}
+
+/**
+* Implements hook_views_jstree_move_child_deny_access
+*/
+function erpal_project_book_jstree_move_child_deny_access($view_name, $display_id, $node, $parent_node) {
+  //if the node has a book page as parent, we deny moving to another if the parent will change to a task
+  $current_parent_nid = !empty($node->field_parent[LANGUAGE_NONE][0]) ? $node->field_parent[LANGUAGE_NONE][0]['target_id'] : false;
+
+  if (!$current_parent_nid) {
+    return false;
+  }
+  
+  //in book view we allow moving to new parents but not in task view because in task view we ma change the book parent without knowing it.
+  if ($view_name == 'book_children')
+    return false;
+    
+  //check the type of the current parent
+  module_load_include('inc', 'erpal_lib', 'inc/node');
+  $base_data = erpal_lib_helper_node_base_data(array($current_parent_nid));
+  $current_parent_type = $base_data[$current_parent_nid]->type;
+  if ($current_parent_type == 'erpal_book_page') {
+    //if the new parent type is another node type we will deny access
+    if ($parent_node->type != 'erpal_book_page') {
+      return true; //deny access
+    }
+  }
+}

@@ -1,0 +1,20 @@
+name = Date Item
+description = Create date item entites for each date of a serial date
+package = Date Item
+core = 7.x
+
+dependencies[] = entity
+dependencies[] = date
+
+files[] = includes/date_item.entity.inc
+files[] = includes/date_item.forms.inc
+files[] = includes/date_item.field.inc
+files[] = includes/date_item_repeat.inc
+files[] = views/date_item_handler_field_entity_label.inc
+
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "date_item"
+datestamp = "1384533572"
+

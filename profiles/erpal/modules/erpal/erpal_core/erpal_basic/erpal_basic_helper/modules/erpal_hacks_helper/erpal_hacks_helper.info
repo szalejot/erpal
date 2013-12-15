@@ -1,0 +1,15 @@
+core = "7.x"
+description = "ERPAL Hacks Helper providing functions to patch bugs in other modules or provide work arrounds"
+name = "erpal_hacks_helper"
+package = "ERPAL"
+php = "5.2.4"
+project = "erpal_hacks_helper"
+version = "7.x-1.0-dev"
+
+files[] = erpal_hacks_helper.module
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "erpal_core"
+datestamp = "1384533584"
+

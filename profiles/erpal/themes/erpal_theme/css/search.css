@@ -1,0 +1,62 @@
+/*
+Document   : global_vars_a_mixins
+Created on : December, 2012, 
+Description:
+Purpose of the stylesheet follows.
+*/
+/*
+TODO customize this sample style
+Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+*/
+/*******************/
+/* IMPORTS
+/*******************/
+/*******************/
+/* VARIABLES
+/*******************/
+/* color variables */
+/* background*/
+/*for left menu*/
+/*for menu item grey border, */
+/*link color*/
+/*styles for alert*/
+/*background for pane titles, table th*/
+/*for border*/
+/*grey link color*/
+/*for quicktabs-tabs color*/
+/*for top menu border*/
+/*for Quick timetracking*/
+/*styles for border*/
+/*for shadow*/
+/*styles for text*/
+/*gradient styles*/
+/*styles for ul*/
+/*styles for mixins*/
+/*styles for h1, h2, h3, h4, h5, h6 mixins*/
+.attachment-before {
+  background-color: #D4D4D4;
+}
+.attachment-before fieldset {
+  border: none;
+  border-top: 1px solid #b6b6b6;
+  padding: 5px 0 0 0;
+}
+.attachment-before fieldset legend {
+  display: none;
+}
+.attachment-before fieldset div.form-checkboxes-horizontal .form-item {
+  float: left;
+  width: auto;
+  margin-left: 10px;
+}
+.attachment-before fieldset div.form-checkboxes-horizontal .form-item a {
+  font-weight: normal;
+}
+.attachment-before fieldset #edit-delete {
+  clear: none !important;
+  margin: 2px 2px 7px 10px !important;
+}
+
+#views-savedsearches-save-search-form .form-item {
+  margin-bottom: 0;
+}

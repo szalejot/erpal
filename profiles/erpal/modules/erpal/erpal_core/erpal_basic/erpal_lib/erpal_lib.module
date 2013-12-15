@@ -1,0 +1,26 @@
+<?php
+/**
+ * @file
+ * Code for the erpal_lib module.
+ */
+
+/**
+* Implements hook_init
+*/
+function erpal_lib_init() {
+  module_load_include('inc', 'erpal_lib', 'inc/date_time');
+  module_load_include('inc', 'erpal_lib', 'inc/node');
+  module_load_include('inc', 'erpal_lib', 'inc/entity');
+}
+
+/**
+ * converts an array as a flat array
+ * @param $result this is the array where the flat result is put
+ */
+function erpal_lib_helper_flatten_array($arr, &$result) {
+  foreach ($arr as $key=>$value) {
+    $result[] = $key;
+    if (is_array($value))
+      erpal_lib_helper_flatten_array($value, $result);  
+  }
+}

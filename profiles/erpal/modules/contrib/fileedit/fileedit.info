@@ -1,0 +1,14 @@
+name = "fileedit"
+description = "Download, open, monitor and upload file changes automatically."
+core = "7.x"
+package = "Misc"
+
+files[] = fileedit.module
+
+version = "7.x-1.0-dev"
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "fileedit"
+datestamp = "1384533573"
+

@@ -1,0 +1,18 @@
+name = "Inline Relation Form"
+description = "Allows users to use inline forms to create new relations (right from the referencing/referenced node form)."
+core = "7.x"
+package = "Relation"
+
+files[] = inline_relation_form.module
+
+dependencies[] = relation
+
+stylesheets[all][] = inline_relation_form.css
+
+version = "7.x-1.0-alpha1"
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "inline_relation_form"
+datestamp = "1384533570"
+

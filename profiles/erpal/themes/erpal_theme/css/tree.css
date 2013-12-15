@@ -1,0 +1,179 @@
+/*
+Document   : global_vars_a_mixins
+Created on : December, 2012, 
+Description:
+Purpose of the stylesheet follows.
+*/
+/*
+TODO customize this sample style
+Syntax recommendation http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html
+*/
+/*******************/
+/* IMPORTS
+/*******************/
+/*******************/
+/* VARIABLES
+/*******************/
+/* color variables */
+/* background*/
+/*for left menu*/
+/*for menu item grey border, */
+/*link color*/
+/*styles for alert*/
+/*background for pane titles, table th*/
+/*for border*/
+/*grey link color*/
+/*for quicktabs-tabs color*/
+/*for top menu border*/
+/*for Quick timetracking*/
+/*styles for border*/
+/*for shadow*/
+/*styles for text*/
+/*gradient styles*/
+/*styles for ul*/
+/*styles for mixins*/
+/*styles for h1, h2, h3, h4, h5, h6 mixins*/
+.jstree-default li.filter_matching a {
+  color: #000 !important;
+}
+
+.erpal_task .views-field {
+  padding-right: 20px;
+}
+
+.jstree-default li.no_filter_matching a {
+  color: #999;
+}
+
+.jstree-default {
+  background-color: white;
+  width: 1019px;
+}
+.jstree-default.jstree-focused {
+  background-color: white !important;
+}
+.jstree-default li:last-child,
+.jstree-default li.jstree-last {
+  background: url(../images/tree_last.png) no-repeat 0 -4px !important;
+}
+.jstree-default .erpal_task {
+  border-bottom: 1px solid #dedede;
+  min-height: 25px;
+  padding: 0 20px 0 0;
+}
+.jstree-default .erpal_task ul li:first-child {
+  border-top: 1px solid #dedede;
+}
+.jstree-default .erpal_task ul li:last-child {
+  border-bottom: none;
+}
+.jstree-default .erpal_task > a {
+  width: 100%;
+  height: 19px;
+  padding: 4px 2px 3px 0;
+}
+.jstree-default .erpal_task > a ins.jstree-icon {
+  display: none;
+}
+.jstree-default .erpal_task > a:hover {
+  background-color: #eeeeee;
+  background-position: -20px;
+  border: none;
+}
+.jstree-default .erpal_task > a:hover .username a:hover {
+  color: red;
+}
+.jstree-default .erpal_task > a .field-content img {
+  color: #5a5a5a;
+  margin-right: 3px;
+  margin-bottom: -3px;
+}
+.jstree-default .erpal_task > a .field-content .title {
+  font-weight: bold;
+}
+.jstree-default .erpal_task > a .field-content .username,
+.jstree-default .erpal_task > a .field-content .estimation,
+.jstree-default .erpal_task > a .field-content .percent {
+  margin-left: 10px;
+  font-size: 10px;
+}
+.jstree-default .erpal_task > a .field-content .tree-icons-left {
+  position: absolute;
+  right: 32px;
+}
+.jstree-default .erpal_task > a .field-content .tree-icons-left img {
+  margin-left: 10px;
+}
+.jstree-default .erpal_task > a .views-field-edit-node {
+  color: #5a5a5a;
+}
+.jstree-default .erpal_task > a .views-field-edit-node .field-content a {
+  color: #5a5a5a !important;
+}
+.jstree-default .erpal_task.jstree-open ul {
+  width: 100%;
+}
+.jstree-default .erpal_task .jstree-loading > .jstree-icon {
+  display: inline-block;
+  float: left;
+}
+.jstree-default .erpal_task .jstree-clicked {
+  border: none;
+}
+
+/* ERPAL Documents Pages Tree */
+.node-type-erpal-book-page .jstree-default,
+.node-type-erpal-book .jstree-default {
+  max-width: 250px;
+}
+.node-type-erpal-book-page .jstree-default > ul > .erpal_book_page,
+.node-type-erpal-book .jstree-default > ul > .erpal_book_page {
+  max-width: 230px;
+}
+.node-type-erpal-book-page .jstree-default .erpal_book_page ins,
+.node-type-erpal-book .jstree-default .erpal_book_page ins {
+  float: left;
+}
+.node-type-erpal-book-page .jstree-default .erpal_book_page a,
+.node-type-erpal-book .jstree-default .erpal_book_page a {
+  white-space: normal;
+  height: auto;
+  font-size: 11px;
+}
+.node-type-erpal-book-page .jstree-default .erpal_book_page a ins,
+.node-type-erpal-book .jstree-default .erpal_book_page a ins {
+  float: left;
+}
+.node-type-erpal-book-page .jstree-default .erpal_book_page a .views-field,
+.node-type-erpal-book .jstree-default .erpal_book_page a .views-field {
+  float: left;
+}
+.node-type-erpal-book-page .jstree-default .erpal_book_page a .views-field-edit-node,
+.node-type-erpal-book .jstree-default .erpal_book_page a .views-field-edit-node {
+  margin-left: 21px;
+  font-size: 10px;
+  clear: left;
+}
+
+/*max-widths title */
+.jstree-default > ul > li.erpal_book_page > a .views-field-title {
+  max-width: 205px;
+}
+.jstree-default > ul > li.erpal_book_page > ul > li.erpal_book_page > a .views-field-title {
+  max-width: 185px;
+}
+.jstree-default > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > a .views-field-title {
+  max-width: 165px;
+}
+.jstree-default > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > a .views-field-title {
+  max-width: 145px;
+}
+.jstree-default > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > a .views-field-title {
+  max-width: 125px;
+}
+.jstree-default > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > a .views-field-title {
+  max-width: 105px;
+}
+.jstree-default > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > ul > li.erpal_book_page > a .views-field-title {
+  max-width: 85px;
+}

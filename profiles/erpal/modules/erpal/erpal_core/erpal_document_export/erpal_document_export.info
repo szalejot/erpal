@@ -1,0 +1,12 @@
+name = "ERPAL Document export"
+description = "Interface to ERPAL Document export Plugins"
+core=7.x
+package = "ERPAL Export"
+files[] = document_export.inc
+dependencies[] = ctools
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "erpal_core"
+datestamp = "1384533584"
+

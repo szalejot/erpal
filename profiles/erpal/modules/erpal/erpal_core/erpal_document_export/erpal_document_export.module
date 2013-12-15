@@ -1,0 +1,136 @@
+<?php
+
+define('ERPAL_DOCUMENT_EXPORT_TYPE', 'document_export');
+
+define('TABLE_OF_CONTENTS_ID', 'word-table-of-contents');
+
+function erpal_document_export_get_toc_id(){
+  return TABLE_OF_CONTENTS_ID;
+}
+
+/**
+ * Implements hook_permission()
+ */
+function erpal_document_export_permission(){
+  return array(
+    'administer erpal document export' => array(
+      'title' => t('Administer ERPAL Document export'),
+    ),
+  );
+}
+
+/**
+* Implements hook_theme
+*/
+function erpal_document_export_theme() {
+  return array(   
+    'erpal_document_export_toc' => array(
+      'variables' => array(),
+      'template' => 'template/export_toc',
+    ),
+    'erpal_document_export_frontpage' => array(
+      'variables' => array(),
+      'template' => 'template/export_frontpage',
+    ),
+    'erpal_document_export_header' => array(
+      'variables' => array(),
+      'template' => 'template/export_header',
+    ),
+    'erpal_document_export_comment' => array(
+      'variables' => array(),
+      'template' => 'template/export_comment',
+    ),
+    'erpal_document_export_page' => array(
+      'variables' => array(),
+      'template' => 'template/export_page',
+    ),
+    
+  );
+}
+
+
+
+/**
+ * Implements hook_ctools_plugin_type()
+ */
+function erpal_document_export_ctools_plugin_type(){
+  return array(
+    'document_export' => array(
+      'cache' => FALSE,
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_ctools_plugin_directory()
+ * Tells ctools the place where we put our plugins
+ */
+function erpal_document_export_ctools_plugin_directory($module, $plugin){
+  if($module == 'erpal_document_export'){
+    return 'plugins/' . $plugin;
+  }
+}
+ 
+/**
+ * Returns an instance of the Plugin
+ * @param $name: Name of the plugin
+ * @param $options: array with content and options about the document that 
+ * should be created
+ */
+function erpal_document_export_get_plugin_instance($name, $options=array()){
+  ctools_include('plugins');
+  $plugin = ctools_get_plugins('erpal_document_export', ERPAL_DOCUMENT_EXPORT_TYPE, $name);
+  $class = ctools_plugin_get_class($plugin, 'handler');
+  
+  $instance;
+  
+  try{
+  	$instance = new $class($options);
+  } catch(Exception $e) {
+  	$instance = FALSE;
+  }
+  
+  return $instance;
+}
+
+/**
+ * Loads and returns all plugins for this module
+ */
+function erpal_document_export_get_plugin_list(){
+  module_load_include('inc', 'erpal_document_export', 'document_export');
+  ctools_include('plugins');
+  $plugins =  ctools_get_plugins('erpal_document_export', ERPAL_DOCUMENT_EXPORT_TYPE);
+  $plugin_list = array();
+  foreach ($plugins as $id => $plugin) {
+      $plugin_list[$id] = $plugin['type'];
+  }
+  return $plugin_list;
+}
+
+/**
+ * Returns the rendered html for a comment 
+ */
+function _erpal_document_export_get_comment($cid, $options){
+  $comment = comment_load($cid);
+  
+  $wrapper = entity_metadata_wrapper('comment', $comment);
+  $values['body'] = '';
+  
+  $body = field_get_items('comment', $comment, 'comment_body');
+  if ($body){
+    $values['body'] = $body[0]['value'];
+  }
+
+  $values['cid'] = $cid;
+  if ($options['export_plugin'] == 'document_odt_export') {
+    $values['title'] = $wrapper->subject->value();
+    $values['comment'] = TRUE;
+    return $values;
+  }
+  $values['subject'] = $wrapper->subject->value();
+  $html = theme('erpal_document_export_comment', $values);
+  return $html;
+}
+
+

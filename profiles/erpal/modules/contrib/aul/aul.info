@@ -1,0 +1,11 @@
+name = AUL
+description = Access user list API. Has no UI features on its own but in submodules.
+core = 7.x
+package = Access control
+
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "aul"
+datestamp = "1384533571"
+

@@ -1,0 +1,12 @@
+name = Content Access View
+description = Extends content access control of view permissions.
+core = 7.x
+package = Access control
+dependencies[] = content_access
+
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "content_access_view"
+datestamp = "1384533570"
+

@@ -1,0 +1,14 @@
+name = Ajax Checklist
+description = Creates filter-driven checklists with ajax updating to the database
+package = Other
+project = "ajax_checklist"
+core = 7.x
+
+files[] = ajax_checklist.info
+
+; Information added by  packaging script on 2013-11-15
+version = "7.x-2.0-alpha6"
+core = "7.x"
+project = "erpal"
+datestamp = "1384533536"
+

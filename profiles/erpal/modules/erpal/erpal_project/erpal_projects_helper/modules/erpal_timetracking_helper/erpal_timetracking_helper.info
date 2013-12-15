@@ -1,0 +1,18 @@
+name = Erpal timetracking helper
+description = Provides views plugin for parent-child structures
+package = ERPAL
+core = 7.x
+
+dependencies[] = "views"
+dependencies[] = "erpal_projects_helper"
+
+files[] = erpal_timetracking_helper.module
+files[] = erpal_timetracking_helper.views.inc
+files[] = erpal_timetracking_helper_handler_filter_timetracking_children.inc
+
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "erpal_project"
+datestamp = "1384533569"
+

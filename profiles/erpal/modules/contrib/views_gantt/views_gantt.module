@@ -1,0 +1,352 @@
+<?php
+
+/**
+ * @file
+ * Module file for Views Gantt
+ */
+
+/**
+ * Implements hook_views_api().
+ */
+function views_gantt_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+/**
+ * Implements hook_libraries_info().
+ */
+function views_gantt_libraries_info() {
+  $libraries['dhtmlxgantt'] = array(
+    'name' => 'dhtmlxgantt',
+    'vendor url' => 'http://dhtmlx.com/docs/products/dhtmlxGantt/index.shtml',
+    'download url' => 'http://www.dhtmlx.com/docs/products/dhtmlxGantt/download/dhtmlxGantt.zip',
+    'version' => '1.3',
+    'path' => 'dhtmlxGantt', //the subdirectory of the library
+    'files' => array(
+      'js' => array(
+        'codebase/dhtmlxgantt.js',
+        'codebase/dhtmlxcommon.js',
+      ),
+      'css' => array(
+        'codebase/dhtmlxgantt.css',
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+
+/**
+ * Implements hook_menu().
+ */
+function views_gantt_menu() {
+  $items = array();
+  $items['views_gantt/project.xml'] = array(
+    'type' => MENU_CALLBACK,
+    'page callback' => 'views_gantt_load_xml',
+    'access callback' => TRUE,
+  );
+  // @todo Add permission to update tasks from Gantt chart?
+  $items['views_gantt/update/%'] = array(
+    'type' => MENU_CALLBACK,
+    'page callback' => 'views_gantt_update_tasks',
+    'page arguments' => array(2),
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+/**
+ * Builds XML file for dhtmlxGantt Chart.
+ * 
+ * @return string
+ *   String XML file
+ */
+function views_gantt_build_xml($project_data, $tasks) {
+  $xml = new SimpleXMLElement("<projects></projects>");
+
+  // Add project info.
+  $project = $xml->addChild('project');
+  foreach ($project_data as $key => $value) {
+    $project->addAttribute($key, $value);
+  }
+
+  // Add tasks.
+  // Rebuild tasks array to get proper structure of tasks and subtasks.
+  _views_gantt_prepare_tasks($tasks);
+  // Add tasks to xml.
+  _views_gantt_build_tasks($project, $tasks);
+
+  return $xml->asXML();
+}
+
+/**
+ * Returns XML file for dhtmlxGantt Chart.
+ */
+function views_gantt_load_xml() {
+  if (!isset($_SESSION['views_gantt']) && isset($_GET['view'], $_GET['display'], $_GET['project'])) {
+    $view = views_get_view($_GET['view']);
+    $exposed_filters = array();
+    foreach ($_GET as $key => $value) {
+      if (isset($view->exposed_data[$key])) {
+        $exposed_filters[$key] = $value;
+      }
+    }
+    $view->exposed_input = array_merge($exposed_filters, (array)$view->exposed_input);
+    $view->exposed_raw_input = array_merge($exposed_filters, (array)$view->exposed_raw_input);
+    $view->exposed_data = array_merge($exposed_filters, (array)$view->exposed_data);
+
+    $view->preview($_GET['display'], $_GET['project']);    
+    //$view = views_embed_view($_GET['view'], $_GET['display'], $_GET['project']);
+  }
+
+  // We put in session info about tasks and
+  // project before view was rendered,
+  // now we get it to build XML.
+  if (isset($_SESSION['views_gantt'])) {
+    $xml = views_gantt_build_xml($_SESSION['views_gantt']['project'], $_SESSION['views_gantt']['tasks']);
+    drupal_add_http_header('Content-Type', 'text/xml');
+    print $xml;
+  }
+  else {
+    drupal_access_denied();
+  }
+  drupal_exit();
+}
+
+/**
+ * Callback for task/project update when we change it in Gantt chart.
+ */
+function views_gantt_update_tasks($task_id) {
+  // tmp.
+  if ($_POST) {
+    $_SESSION['views_gantt_save'] = $_POST;
+  }
+
+  if (isset($_SESSION['views_gantt_save'])) {
+    $data = $_SESSION['views_gantt_save'];
+    $view_name = $data['view_name'];
+
+    $style_options = views_gantt_get_style_options($view_name);
+
+    // Update project info.
+    if (isset($data['fields']['project_date_field'])) {
+      $project_date = $data['fields']['project_date_field'];
+      unset($data['fields']['project_date_field']);
+
+      $project_id = $data['project_id'];
+      $project = node_load($project_id);
+      if ($project) {
+        views_gantt_update_node($project, array('project_date_field' => $project_date), $style_options);
+      }
+    }
+
+    // Update task info.
+    $task = node_load($task_id);
+    if ($task) {
+      if (isset($data['action']) && $data['action'] == 'drag') {
+        $date_field = $data['fields']['date_field'];
+        $end_date_field = $data['fields']['end_date_field'];
+        if ($date_field == $end_date_field) {
+          $data['fields']['end_date_field'] += 3600 * 24;
+        }
+      }
+      views_gantt_update_node($task, $data['fields'], $style_options);
+    }
+  }
+
+  // Show empty page in browser.
+  return NULL;
+}
+
+/**
+ * Updates node if there are changes in it's fields.
+ * 
+ * @param object $node
+ *   Node object
+ * @param array $data
+ *   Array of option names (from style plugin options) => values to update
+ * @param array $style_options
+ *   Array of all style plugin option names
+ */
+function views_gantt_update_node($node, $data, $style_options) {
+  $changed = FALSE;
+  $lang = LANGUAGE_NONE;
+
+  // For now we support only simple fields that
+  // storing their values in array with 'value' key,
+  // and datetime fields (form Date module).
+  // Maybe we don't need to add another field types,
+  // because we update only dates and duration.
+  foreach ($data as $option_name => $option_value) {
+    if (isset($style_options[$option_name])) {
+      $field_name = $style_options[$option_name];
+      if (isset($node->$field_name)) {
+        if (is_array($node->$field_name)) {
+          // Get field info.
+          $field_info = field_info_field($field_name);
+
+          // If field is translatable, we check if it has
+          // an index equals to node language.
+          $is_translatable = field_is_translatable('node', $field_info);
+          if ($is_translatable && isset($node->{$field_name}[$node->language])) {
+            $lang = $node->language;
+          }
+
+          $index = 'value';
+          if ($option_name == 'end_date_field' && isset($field_info['columns']['value2'])) {
+            $index = 'value2';
+          }
+
+          // If field type = datetime, modify new value before storing.
+          if (isset($field_info['columns'][$index]) && $field_info['columns'][$index]['type'] == 'datetime') {
+            $option_value = format_date($option_value, 'custom', 'Y-m-d H:i:s', 'UTC');
+          }
+
+          $node->{$field_name}[$lang][0][$index] = $option_value;        
+        }
+        else {
+          $node->$field_name = $option_value;
+        }
+        $changed = TRUE;
+      }
+    }
+  }
+
+  // If we have some changes, we need to save node.
+  // Also if node saved, we remove cached gantt data from session.
+  if ($changed) {
+    node_save($node);
+    unset($_SESSION['views_gantt']);
+  }
+}
+
+/**
+ * Adds tasks to XML.
+ * 
+ * @param object $parent
+ *   SimpleXMLElement object with parent tag ('project' or 'task')
+ * @param array $tasks
+ *   Array of tasks which will be attached to $parent
+ */
+function _views_gantt_build_tasks(&$parent, $tasks) {
+  foreach ($tasks as $key => $row) {
+    // Add task tag to XML.
+    $task = $parent->addChild('task');
+    $task->addAttribute('id', $key);
+
+    // Add task info to XML.
+    foreach ($row as $field_key => $field_value) {
+      if ($field_key == 'parent_id') {
+        continue;
+      }
+      if (is_array($field_value)) {
+        $field_value = '';
+      }
+      $task->addChild($field_key, $field_value);
+    }
+
+    // If task have subtasks, we add them to XML recursively.
+    if (is_array($row['childtasks'])) {
+      _views_gantt_build_tasks($task->childtasks, $row['childtasks']);
+    }
+  }
+}
+
+/**
+ * Modifies tasks array. Subtasks go to 'childtasks' item of parent task array.
+ */
+function _views_gantt_prepare_tasks(&$tasks) {
+  $relations = array();
+  foreach ($tasks as $key => $value) {
+    if ($value['parent_id']) {
+      $relations[$key] = $value['parent_id'];
+    }
+  }
+
+  $_tasks = $tasks;
+  foreach ($_tasks as $key => &$value) {
+    if (!empty($value['child_ids'])) {
+      foreach ($value['child_ids'] as $child_key) {
+        if (isset($tasks[$child_key])) {
+          $child_task = $tasks[$child_key];
+          $parent_id = $child_task['parent_id'];
+          unset($tasks[$child_key]);
+
+          $path = array_reverse(_views_gantt_task_path($parent_id, $tasks, $relations));
+          $t = &$tasks;
+          foreach ($path as $task_key) {
+            $t = &$t[$task_key];
+          }
+          $t[$child_key] = $child_task;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Helper for _views_gantt_prepare_tasks().
+ * 
+ * @param array $task_id
+ *   Id of task (nid)  
+ * @param array $tasks
+ *   Array of tasks
+ * @param array $relations
+ *   Array of every task Id => parent Id of this task
+ * @param array $path
+ *   Array of tasks Ids
+ * 
+ * @return array
+ *   Array of tasks Ids
+ */
+function _views_gantt_task_path($task_id, $tasks, $relations, $path = array()) {
+  $path[] = 'childtasks';
+  $path[] = $task_id;
+
+  if (!isset($tasks[$task_id]) && isset($relations[$task_id])) {
+    $parent_id = $relations[$task_id];
+    $path = _views_gantt_task_path($parent_id, $tasks, $relations, $path);      
+  }
+
+  return $path;
+}
+
+/**
+ * Formats date for Gantt Chart.
+ */
+function views_gantt_normalize_date_field(&$field) {
+  if (!is_numeric($field)) {
+    $field = strtotime($field);
+  }
+  $field = format_date($field, 'custom', 'Y,n,j');
+}
+
+/**
+ * Get style plugin options.
+ */
+function views_gantt_get_style_options($view_name) {
+  $view = views_get_view($view_name);
+  // Get style plugin options.
+  // Some fields in $this->options can have incorrect names (e.g. field_date_1),
+  // so we should check the real field name.
+  $style_options = array();
+  foreach ($view->display as $display) {
+    $display_options = $display->display_options;
+    if (isset($display_options['style_plugin']) && $display_options['style_plugin'] == 'gantt') {
+      $style_options = $display->display_options['style_options'];
+      foreach ($style_options as $key => &$value) {
+        if (isset($display->display_options['fields'][$value])) {
+          $value = $display->display_options['fields'][$value]['field'];
+        }
+      }
+      break;
+    }
+  }
+
+  return $style_options;
+}

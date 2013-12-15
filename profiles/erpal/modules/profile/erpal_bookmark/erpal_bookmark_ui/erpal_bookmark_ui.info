@@ -1,0 +1,23 @@
+name = ERPAL Bookmark UI
+description = ERPAL Bookmark UI Module
+core = 7.x
+package = ERPAL UI
+version = 7.x-1.0-dev
+project = erpal_bookmark_ui
+dependencies[] = ctools
+dependencies[] = erpal_basic_ui
+dependencies[] = erpal_bookmark
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[menu_links][] = user-menu:user/bookmarks
+features[views_view][] = bookmarks
+features_exclude[dependencies][features] = features
+features_exclude[dependencies][menu] = menu
+
+; Information added by  packaging script on 2013-11-15
+version = "7.x-2.0-alpha6"
+core = "7.x"
+project = "erpal"
+datestamp = "1384533536"
+

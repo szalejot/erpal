@@ -1,0 +1,23 @@
+name = ERPAL CRM Tasks
+description = ERPAL CRM Tasks Module
+core = 7.x
+package = ERPAL
+php = 5.2.4
+version = 7.x-1.0-dev
+project = erpal_crm_tasks
+dependencies[] = entityreference
+dependencies[] = erpal_basic_helper
+dependencies[] = erpal_crm
+dependencies[] = erpal_project
+dependencies[] = features
+features[features_api][] = api:2
+features[field_instance][] = node-erpal_crm_activity-field_task_ref
+features_exclude[field_base][field_task_ref] = field_task_ref
+files[] = inc/config.inc
+
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "erpal_core"
+datestamp = "1384533584"
+

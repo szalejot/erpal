@@ -1,0 +1,57 @@
+name = ERPAL CRM UI
+description = ERPAL CRM UI module
+core = 7.x
+package = ERPAL UI
+version = 7.x-1.32-dev
+project = erpal_crm_ui
+dependencies[] = cne
+dependencies[] = ctools
+dependencies[] = date_views
+dependencies[] = ds
+dependencies[] = erpal_basic_ui
+dependencies[] = erpal_crm
+dependencies[] = features
+dependencies[] = menu
+dependencies[] = page_manager
+dependencies[] = panels_mini
+dependencies[] = php
+dependencies[] = quicktabs
+dependencies[] = strongarm
+dependencies[] = views
+dependencies[] = views_calc
+dependencies[] = views_content
+features[ctools][] = ds:ds:1
+features[ctools][] = page_manager:pages_default:1
+features[ctools][] = panels_mini:panels_default:1
+features[ctools][] = quicktabs:quicktabs:1
+features[ctools][] = strongarm:strongarm:1
+features[ctools][] = views:views_default:3.0
+features[ds_field_settings][] = node|erpal_contact|in_activity
+features[ds_layout_settings][] = node|erpal_contact|in_activity
+features[ds_layout_settings][] = node|erpal_crm_activity|form
+features[features_api][] = api:2
+features[filter][] = php_code
+features[menu_links][] = menu-erpal-menu:activities
+features[page_manager_handlers][] = node_view_panel_context_3
+features[page_manager_handlers][] = node_view_panel_context_8
+features[page_manager_pages][] = crm
+features[panels_mini][] = activity_general_fields
+features[panels_mini][] = activity_status_panel
+features[panels_mini][] = contact_details_panel
+features[quicktabs][] = activity_content_tabs
+features[quicktabs][] = all_activities_tabs
+features[quicktabs][] = contact_content_tabs
+features[quicktabs][] = customer_activities_tabs
+features[variable][] = additional_settings__active_tab_erpal_contact
+features[variable][] = additional_settings__active_tab_erpal_crm_activity
+features[variable][] = maxlength_js_erpal_crm_activity
+features[variable][] = maxlength_js_label_erpal_crm_activity
+features[views_view][] = activity_revisions
+features[views_view][] = crm_activities
+
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "erpal_core"
+datestamp = "1384533584"
+

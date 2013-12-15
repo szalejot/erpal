@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file all functions needed for updates of the module
+ */
+
+/**
+ * Updates the Version to 7.1. Switch to AUL
+ */
+function erpal_calendar_helper_update_7100() {
+  // Remowe all ACL of module because we switch to AUL
+  if(module_exists('acl')) {
+    
+    // Find all ACL items of erpal_calendar_helper module
+    $acls = db_select('acl', 'acl')
+      ->fields('acl', array('acl_id'))
+      ->condition('module', 'erpal_calendar_helper')
+      ->execute()->fetchAll();
+
+    // Delete existing ACLs
+    if (is_array($acls)) {
+      foreach ($acls as $acl) {
+        acl_delete_acl($acl->acl_id);
+      }
+    }
+
+    node_access_rebuild();
+  }
+}
+
+/**
+* Enable the new erpal_calendar_crm module to integrate calendar with CRM
+*/
+function erpal_calendar_helper_update_7101() {
+  module_enable(array('erpal_calendar_crm'));
+}

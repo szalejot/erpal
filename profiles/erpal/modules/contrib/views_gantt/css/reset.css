@@ -1,0 +1,23 @@
+#GanttDiv table,
+#GanttDiv tr,
+#GanttDiv td,
+#GanttDivFullscreen table,
+#GanttDivFullscreen tr,
+#GanttDivFullscreen td {
+  border: none;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+#GanttDiv img,
+#GanttDivFullscreen img {
+  max-width: none;
+}
+
+#GanttDivFullscreen {
+	overflow: hidden;
+}
+
+.gantt-fullscreen {
+	cursor: pointer;
+}

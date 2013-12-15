@@ -1,0 +1,21 @@
+core = "7.x"
+description = "ERPAL docs service integrates file handling functionallity with services for apps"
+
+name = "ERPAL docs service"
+package = "ERPAL Services"
+php = "5.2.4"
+project = "erpal_docs_service"
+version = "7.x-1.0-dev"
+
+files[] = erpal_docs_service.module
+files[] = inc/files.inc
+
+dependencies[] = services
+dependencies[] = rest_server
+
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "erpal_core"
+datestamp = "1384533584"
+

@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file all functions needed for updates of the module
+ */
+
+/**
+* Enable the new erpal_contract_crm module to integrate contracts with CRM and projects
+*/
+function erpal_contract_helper_update_7001() {
+  module_enable(array('erpal_contract_crm'));
+  module_enable(array('erpal_contract_projects'));
+}

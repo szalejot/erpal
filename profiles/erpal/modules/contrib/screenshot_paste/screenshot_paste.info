@@ -1,0 +1,17 @@
+name = "Screenshot paste"
+description = "Allows the user to paste a screenshot from clipboard"
+core = "7.x"
+package = "Misc"
+
+files[] = screenshot_paste.module
+
+dependencies[] = libraries
+dependencies[] = ckeditor
+
+version = "7.x-1.0-beta"
+
+; Information added by drush on 2013-11-15
+version = "erpal_7.x-2.0-alpha6"
+project = "screenshot_paste"
+datestamp = "1384533572"
+
